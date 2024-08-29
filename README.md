@@ -1,59 +1,17 @@
-# laughing-invention
-provider "aws" {
-  region = "us-east-1"  # Update with your desired region
-}
+Hello my name is Saaduddin Baig im currently pursuing btech in computer science with a specialisation in ai and ml in vit ap im a 4th year student and did significant amount of course work for understanding ai which include ai,ml,dl,rl,nlp,krr all these courses have helped to understand the concepts of ai and i have also reflected the usage of them in my projects which is reflected in my resume including these subjects i have also taken part in various certifications which include AWS cloud practioner and google cloud digital leader i have a keen interest in ai and would love to pursue work in this department and my project for this assignment is abt 
 
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"
-}
 
-resource "aws_subnet" "public_subnet" {
-  vpc_id     = aws_vpc.my_vpc.id
-  cidr_block = "10.0.1.0/24"
-}
 
-resource "aws_subnet" "private_subnet" {
-  vpc_id     = aws_vpc.my_vpc.id
-  cidr_block = "10.0.2.0/24"
-}
 
-resource "aws_security_group" "instance_security_group" {
-  name        = "instance-sg"
-  description = "Security group for the EC2 instance"
+Fine tuining LLM with LoRA and Hugging face 
 
-  // Inbound rule for SSH
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  // Outbound rule allowing all traffic
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  vpc_id = aws_vpc.my_vpc.id
-}
-
-resource "aws_instance" "ec2_instance" {
-  ami           = "ami-12345678"  # Replace with your desired AMI ID
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public_subnet.id
-
-  root_block_device {
-    volume_size = 5
-    volume_type = "gp2"
-    delete_on_termination = true
-  }
-
-  tags = {
-    "purpose" = "Assignment"
-  }
-
-  security_groups = [aws_security_group.instance_security_group.name]
-}
+Large Language Models (LLM) are the most significant innovation in natural language processing, and probably in AI in general, in our generation. LLMs like OpenAI’s GPT-4 and Google’s  Gemini achieve human-like performance for a wide range of cognitive tasks involving text, images, and video.
+However, while LLMs have tremendous potential, they require huge computing resources to train, meaning that only a small group of technology giants and research groups are able to build their own LLMs. 
+LLM tuning is a specialized process that takes a pre-trained language model and customizes it for specific tasks or domains.  The advantage of LLM tuning is that it does not require re-training the entire model, so, at least in principle, it should be much simpler and less computationally intensive than training a new LLM. here i willbe using LoRA fro my project
+LoRA (Low-Rank Adaptation) is a highly efficient method of LLM fine tuning, which is putting LLM development into the hands of smaller organizations and even individual developers. 
+LoRA enhances the training and adaptation efficiency of large language models like OpenAI’s GPT-3 and Meta’s LLaMA. Traditional fine-tuning methods require updating all model parameters, which is computationally intensive. LoRA, instead, introduces low-rank matrices that only modify a subset of the original model's weights. The approach focuses on altering the weight matrices in the transformer layers of the model, specifically targeting the most impactful parameters. 
+In this model we focus on using LoRA and hugging face for which is an open source platform for python libraries to create a fine tunining environment 
+In the project i follow through the process of first installing Hugging Face libraries and additional dependencies needed for training. next step includes loading and preparing the dataset by installing U datasets and folowing its imports, the training set consists of size 14732 entris and the test set includes of 819 size . i then tokenize the data for a better description and for filtering purpose by using google/flan-t5-xxl model.after tokenisation the data goes through pre processing as abstractive summarization is a text generation task. after this process is completed we move on to comply disk space here a small error occurs as i dont have the computation power or the gpu extent i tried to divide the data by assigning it to cpu and gpu but mapping resolved in few issues which will take some more time to resolve as higher gpu will inscrese the cost function i have decided to demonstarte my idea.So goin onward i apllied fine tuning property using LoRA and bnb int-8.In addition to the LoRA technique, we will use bitsanbytes.LLM.int8() to quantize out frozen LLM to int8. This allows us to reduce the needed memory for FLAN-T5 XXL ~4x. only training 0.16% of the parameters of the model! This huge memory gain will enable us to fine-tune the model without memory issues.
+next step is to create a DataCollator that will take care of padding the inputs and labels.Last step includes defining the hyperparameters by creating trainer instance. For evaluation purposes we can create some utilities to generate the summaries and group them together. The most commonly used metrics to evaluate summarization task is rogue_score This metric does not behave like the standard accuracy: it will compare a generated summary against a set of reference summaries. 
+ 
+the main challenges faced during this experiment is following the api limit and trying to divert the divice mapping to cpu for yeilding better results and decreasing the computational time gradually I have also thought abt freezing few layers and checking how it will effect the model and the output.
